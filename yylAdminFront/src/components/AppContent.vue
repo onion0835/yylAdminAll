@@ -1,7 +1,7 @@
 <template>
   <main class="py-12">
     <h1 class="text-4xl font-bold text-center mb-4">yylAdmin</h1>
-    <img src="@/assets/main-logo.png" alt="yylAdmin Logo" class="w-48 mx-auto mb-6">
+    <img src="../assets/main-logo.png" alt="yylAdmin Logo" class="w-48 mx-auto mb-6">
     
     <p class="text-center text-xl mb-8">基于ThinkPHP8和Vue3的极简后台管理系统</p>
     
