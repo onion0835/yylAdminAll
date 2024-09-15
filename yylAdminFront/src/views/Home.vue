@@ -30,7 +30,7 @@ import AppFooter from '@/components/AppFooter.vue'
 
 
 export default {
-  name: 'Home'，
+  name: 'Home',
   components: {
     AppHeader,
     AppFooter
