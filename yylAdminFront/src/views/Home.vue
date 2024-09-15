@@ -1,4 +1,6 @@
 <template>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <AppHeader />
   <main class="py-12">
     <h1 class="text-4xl font-bold text-center mb-4">yylAdmin</h1>
     <img src="@/assets/main-logo.png" alt="yylAdmin Logo" class="w-48 mx-auto mb-6">
@@ -18,10 +20,20 @@
     <!-- Feature cards -->
     <!-- ... (保持原来的特性卡片内容) ... -->
   </main>
+  <AppFooter />
+  </div>
 </template>
 
 <script>
+import AppHeader from  '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
+
+
 export default {
-  name: 'Home'
+  name: 'Home'，
+  components: {
+    AppHeader,
+    AppFooter
+  }
 }
 </script>
