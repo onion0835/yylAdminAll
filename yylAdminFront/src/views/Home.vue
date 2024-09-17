@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import AppHeader from  '@/components/AppHeader.vue'
-import AppFooter from '@/components/AppFooter.vue'
+import AppHeader from  '@/layout/AppHeader.vue'
+import AppFooter from '@/layout/AppFooter.vue'
 
 
 export default {

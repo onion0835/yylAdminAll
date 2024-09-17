@@ -9,9 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
+    "@vitejs/plugin-vue": "^4.6.2",
+    "@vue/compiler-sfc": "^3.4.37",
+    "@vue/component-compiler-utils": "^3.3.0",
     "vue": "^3.4.37",
     "vue-router": "^4.1.6",
-    "@vitejs/plugin-vue": "^4.6.2"
+    "vue-template-compiler": "^2.7.16",
+    "axios": "^1.4.0"  
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",

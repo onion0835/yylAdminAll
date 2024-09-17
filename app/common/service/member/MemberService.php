@@ -376,6 +376,13 @@ class MemberService
      */
     public static function login($param, $type = '')
     {
+        // 定义日志文件路径
+        $logFile = __DIR__ . '/login.log';
+
+        // 记录登录请求参数
+        error_log("Login request: " . json_encode($param) . "\n", 3, $logFile);
+
+
         $model = new MemberModel();
         $pk = $model->getPk();
 

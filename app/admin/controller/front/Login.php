@@ -8,6 +8,7 @@ use app\common\service\system\SettingService;
 use app\common\service\system\LoginService;
 use app\common\service\utils\AjCaptchaUtils;
 use app\common\service\utils\CaptchaUtils;
+use app\common\service\member\MemberService;
 use hg\apidoc\annotation as Apidoc;
 
 /**
@@ -97,6 +98,13 @@ class Login extends BaseController
      */
     public function login()
     {
+        // Define the log file path
+        $logFile = __DIR__ . '/login.log';
+
+        // Record the login request parameters
+        error_log("Login request: " . json_encode($this->request->param()) . "\n", 3, $logFile);
+        
+        
         $param = $this->params([
             'username/s'     => '',
             'password/s'     => '',
@@ -126,7 +134,7 @@ class Login extends BaseController
             }
         }
 
-        $data = LoginService::login($param);
+        $data = MemberService::login($param);
 
         return success($data, '登录成功');
     }
