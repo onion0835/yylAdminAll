@@ -3,7 +3,7 @@ import { store } from '@/store'
 import { useStorage } from '@vueuse/core'
 import { useSettingsStore } from '@/store/modules/settings'
 import { login as loginApi, logout as logoutApi } from '@/api/system/login'
-import { info as userInfoApi } from '@/api/system/user-center'
+
 import defaultSettings from '@/settings'
 
 export const useUserStore = defineStore('user',()=>{
@@ -11,6 +11,30 @@ export const useUserStore = defineStore('user',()=>{
     const storePrefix = defaultSettings.storePrefix
     const tokenName = settingsStore.tokenName
     const token = useStorage(storePrefix + tokenName, '')
+    const user = reactive({
+        username: '',
+        nickname: '',
+        avatar_url: '',
+        roles: [],
+        menus: []
+      })
+    
+      // 登录
+      function login(data) {
+        return new Promise((resolve, reject) => {
+          loginApi(data)
+            .then((res) => {
+              const data = res.data
+              const tokenName = settingsStore.tokenName
+              token.value = data[tokenName]
+              resolve()
+            })
+            .catch((err) => {
+              reject(err)
+            })
+        })
+      }
+      
 
 })
 

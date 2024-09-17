@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useSettingsStoreHook } from '@/store/modules/settings'
 import { useUserStoreHook } from '@/store/modules/user'
-import { useAppStoreHook } from '@/store/modules/app'
+//import { useAppStoreHook } from '@/store/modules/app'
 
 // 创建axios实例
 const service = axios.create({
@@ -16,10 +16,10 @@ const service = axios.create({
 service.interceptors.request.use(
   // 请求配置
   (config) => {
-    const appStore = useAppStoreHook()
+    //const appStore = useAppStoreHook()
     const userStore = useUserStoreHook()
     const settingsStore = useSettingsStoreHook()
-    const language = appStore.language
+    //const language = appStore.language
     const tokenValue = userStore.token
     const tokenType = settingsStore.tokenType
     // 设置Token
