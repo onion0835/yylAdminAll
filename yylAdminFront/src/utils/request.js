@@ -19,9 +19,10 @@ service.interceptors.request.use(
     //const appStore = useAppStoreHook()
     const userStore = useUserStoreHook()
     const settingsStore = useSettingsStoreHook()
-    //const language = appStore.language
+    const language = 'zh-cn'
     const tokenValue = userStore.token
     const tokenType = settingsStore.tokenType
+  
     // 设置Token
     if (tokenValue) {
       const tokenName = settingsStore.tokenName

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useStorage } from '@vueuse/core'
 import { store } from '@/store'
 import defaultSettings from '@/settings'
 

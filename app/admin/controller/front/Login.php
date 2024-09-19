@@ -10,6 +10,7 @@ use app\common\service\utils\AjCaptchaUtils;
 use app\common\service\utils\CaptchaUtils;
 use app\common\service\member\MemberService;
 use hg\apidoc\annotation as Apidoc;
+use think\facade\Log;
 
 /**
  * @Apidoc\Title("前端登录退出")
@@ -98,12 +99,11 @@ class Login extends BaseController
      */
     public function login()
     {
-        // Define the log file path
-        $logFile = __DIR__ . '/login.log';
-
-        // Record the login request parameters
-        error_log("Login request: " . json_encode($this->request->param()) . "\n", 3, $logFile);
         
+
+
+        // 记录登录请求参数
+        Log::info('Login request: ' . json_encode($this->request->param()));
         
         $param = $this->params([
             'username/s'     => '',

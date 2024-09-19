@@ -9,6 +9,7 @@
 
 // admin公共函数文件
 use think\facade\Request;
+use think\facade\Log;
 use app\common\service\system\MenuService;
 
 /**
@@ -73,11 +74,16 @@ function menu_is_disable($menu_url = '')
  */
 function menu_is_unlogin($menu_url = '')
 {
+    
     if (empty($menu_url)) {
         $menu_url = menu_url();
     }
 
     $unlogin_url = MenuService::unloginList();
+    //打日志
+    Log::info('unlogin_url: ' . json_encode($unlogin_url)); 
+    Log::info('menu_url: ' . json_encode($menu_url)); 
+    
     if (in_array($menu_url, $unlogin_url)) {
         return true;
     }

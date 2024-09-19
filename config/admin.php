@@ -26,6 +26,7 @@ return [
         'admin/system.Login/setting',
         'admin/system.Login/captcha',
         'admin/system.Login/login',
+        'admin/front.Login/login'
     ],
 
     // 菜单免权url（无需权限）

@@ -18,7 +18,7 @@ use app\common\service\member\ThirdService;
 use app\common\service\member\SettingService;
 use app\common\service\setting\RegionService;
 use hg\apidoc\annotation as Apidoc;
-
+use think\facade\Log;
 /**
  * @Apidoc\Title("会员管理")
  * @Apidoc\Group("member")
@@ -283,7 +283,8 @@ class Member extends BaseController
                     'application' => SettingService::APP_YA_ADMIN,
                 ];
                 validate(MemberValidate::class)->scene('add')->check($add);
-                MemberService::add($add);
+                $result = MemberService::add($add);
+                Log::info('Member import result: ' . json_encode($result));
             } catch (\Exception $e) {
                 $errmsg = $e->getMessage();
             }
