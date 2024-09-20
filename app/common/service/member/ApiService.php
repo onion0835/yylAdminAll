@@ -14,6 +14,8 @@ use app\common\cache\member\ApiCache;
 use app\common\cache\member\GroupCache;
 use app\common\model\member\ApiModel;
 use app\common\model\member\GroupApisModel;
+use app\api\common\api_url;
+use think\facade\Request;
 
 /**
  * 会员接口
@@ -77,9 +79,11 @@ class ApiService
      */
     public static function info($id = '', $exce = true)
     {
+ 
         if (empty($id)) {
             $id = api_url();
         }
+        
 
         $info = ApiCache::get($id);
         if (empty($info)) {

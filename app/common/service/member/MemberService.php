@@ -19,6 +19,7 @@ use app\common\service\utils\RetCodeUtils;
 use app\common\model\member\MemberModel;
 use app\common\model\member\ThirdModel;
 use hg\apidoc\annotation as Apidoc;
+use think\facade\Log;
 
 /**
  * 会员管理
@@ -376,11 +377,7 @@ class MemberService
      */
     public static function login($param, $type = '')
     {
-        // 定义日志文件路径
-        $logFile = __DIR__ . '/login.log';
-
-        // 记录登录请求参数
-        error_log("Login request: " . json_encode($param) . "\n", 3, $logFile);
+        Log::info('MemberService login start: '  );
 
 
         $model = new MemberModel();
@@ -393,6 +390,7 @@ class MemberService
         $password = $param['password'] ?? '';
 
         $where = [];
+        Log::info('MemberService login start: $type=' . $type . ' - $username=' . $username . ' - $phone=' . $phone . ' - $email=' . $email);
         if ($type == 'username') {
             // 通过用户名登录
             $where[] = ['username', '=', $username];
@@ -412,18 +410,24 @@ class MemberService
             }
         }
         $where[] = where_delete();
+        Log::info('MemberService login start: $where=' . json_encode($where));
 
         $field = $pk . ',username,nickname,phone,email,password,login_num,is_disable';
         $member = $model->field($field)->where($where)->find();
+        $sql = $model->getLastSql();
+        Log::info('MemberService login Executed SQL1: ' . $sql);
         if (empty($member)) {
             if (empty($type)) {
                 $member = $model->field($field)->where('username|phone|email', $account)->where([where_delete()])->find();
+                $sql = $model->getLastSql();
+    Log::info('MemberService login Executed SQL2: ' . $sql);
             }
             if (empty($member)) {
                 exception('账号或密码错误.');
             }
         }
         if ($password) {
+            Log::info('MemberService login : $password='. $password . ' - $member[password]=' . $member['password']);
             if (!password_verify($password, $member['password'])) {
                 exception('账号或密码错误..');
             }

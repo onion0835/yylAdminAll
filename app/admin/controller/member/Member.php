@@ -265,6 +265,7 @@ class Member extends BaseController
      */
     public function import()
     {
+        Log::info('Member import start: '  );
         $param = $this->params(['import/a' => []]);
 
         validate(MemberValidate::class)->scene('import')->check($param);
@@ -274,11 +275,11 @@ class Member extends BaseController
             $errmsg = '';
             try {
                 $add = [
-                    'nickname'    => $v['昵称'] ?? '',
-                    'username'    => $v['用户名'] ?? '',
-                    'phone'       => $v['手机'] ?? '',
-                    'email'       => $v['邮箱'] ?? '',
-                    'password'    => $v['密码'] ?? '',
+                    'nickname'    => $v['nicheng'] ?? '',
+                    'username'    => $v['yonghuming'] ?? '',
+                    'phone'       => $v['mobile'] ?? '',
+                    'email'       => $v['email'] ?? '',
+                    'password'    => $v['password'] ?? '',
                     'platform'    => SettingService::PLATFORM_YA,
                     'application' => SettingService::APP_YA_ADMIN,
                 ];

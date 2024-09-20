@@ -134,7 +134,7 @@ class Login extends BaseController
             }
         }
 
-        $data = MemberService::login($param);
+        $data = MemberService::login($param,'username');
 
         return success($data, '登录成功');
     }

@@ -24,6 +24,10 @@ function api_url()
     return app('http')->getName() . '/' . Request::pathinfo();
 }
 
+function api_url_test()
+{
+    return "test";
+}
 /**
  * 接口是否存在
  *
