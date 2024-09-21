@@ -28,9 +28,11 @@
 </template>
 
 <script setup>
-import {ref , reactive, getCurrentInstance} from 'vue';
+import {ref , reactive, getCurrentInstance,watch} from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useSettingsStoreHook } from '@/store/modules/settings'
 import { useUserStoreHook } from '@/store/modules/user'
+
 
 import AppHeader from '@/layout/AppHeader.vue';
 import AppFooter from '@/layout/AppFooter.vue';
@@ -78,9 +80,14 @@ const loading = ref(false);
 const isCaptchaOn = ref(true);
 // 注册开关
 const register = ref(false);
-const redirect = ref(undefined);
+const redirect = ref('');
+const otherQuery = ref({});
+const route = useRoute();
+const router = useRouter();
+
 /*
 function handleLogin(){
+
   proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
       console.log('表单数据有效');
@@ -89,10 +96,39 @@ function handleLogin(){
     }
   });
 }*/
+watch(route, (newQuery) => { 
+  const query = newQuery.query;
+  if(query){  
+    console.log(query);
+    redirect.value = query.redirect;
+    otherQuery.value = getOtherQuery(query);
+  }
+}, { immediate: true });
+
+
+
+
+
+function getOtherQuery(query)
+{
+  console.log(query);
+  return Object.keys(query).reduce((acc, key) => {
+    if (key !== 'redirect') {
+      acc[key] = query[key];
+    }
+    return acc;
+  }, {});
+}
+
+
 
 function handleLogin() {
+console.log('redirect.value',redirect.value);
+console.log('otherQuery.value',otherQuery.value);
+
 
   if (validateForm()) {
+
     console.log('表单数据有效');
     loading.value = true;
     const useUserStore = useUserStoreHook()
@@ -101,9 +137,10 @@ function handleLogin() {
             .then(() => {
               proxy.$router
                 .push({
-                  path: this.redirect || '/',
-                  query: this.otherQuery
+                  path: redirect.value || '/',
+                  query: otherQuery.value
                 })
+
                 .catch(() => {
                   loading.value = false
                 })
