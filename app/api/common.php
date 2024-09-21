@@ -8,6 +8,8 @@
 // +----------------------------------------------------------------------
 
 // api公共函数文件
+namespace app\api\common;
+
 use think\facade\Config;
 use think\facade\Request;
 use app\common\service\member\ApiService;

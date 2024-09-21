@@ -14,7 +14,6 @@ use app\common\cache\member\ApiCache;
 use app\common\cache\member\GroupCache;
 use app\common\model\member\ApiModel;
 use app\common\model\member\GroupApisModel;
-use app\api\common\api_url;
 use think\facade\Request;
 
 /**
@@ -68,7 +67,10 @@ class ApiService
 
         return $data;
     }
-
+    static function api_url()
+    {
+        return app('http')->getName() . '/' . Request::pathinfo();
+    }
     /**
      * 会员接口信息
      *
@@ -81,7 +83,8 @@ class ApiService
     {
  
         if (empty($id)) {
-            $id = api_url();
+            //$id = api_url();
+            $id = self::api_url();
         }
         
 
