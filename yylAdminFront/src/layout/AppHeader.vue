@@ -1,13 +1,13 @@
 <template>
-  <header class="flex justify-between items-center py-6">
-    <img src="../assets/logo.png" alt="Logo" class="w-24">
+  <header class="flex justify-between items-center py-3 px-4 sm:px-6 lg:px-8 bg-white shadow-sm">
+    <img src="../assets/logo.png" alt="Logo" class="h-8 w-auto">
     <nav class="space-x-4">
-      <router-link to="/" class="text-gray-600 hover:text-gray-900">首页</router-link>
-      <router-link to="/content" class="text-gray-600 hover:text-gray-900">内容</router-link>
-      <router-link to="/files" class="text-gray-600 hover:text-gray-900">文件</router-link>
-      <router-link to="/feedback" class="text-gray-600 hover:text-gray-900">反馈</router-link>
-      <a @click="login" class="text-gray-600 hover:text-gray-900 cursor-pointer">登录</a>
-      <router-link to="/profile" class="text-gray-600 hover:text-gray-900">个人中心</router-link>
+      <router-link to="/" class="text-sm text-gray-600 hover:text-gray-900">首页</router-link>
+      <router-link to="/content" class="text-sm text-gray-600 hover:text-gray-900">内容</router-link>
+      <router-link to="/files" class="text-sm text-gray-600 hover:text-gray-900">文件</router-link>
+      <router-link to="/feedback" class="text-sm text-gray-600 hover:text-gray-900">反馈</router-link>
+      <a @click="login" class="text-sm text-gray-600 hover:text-gray-900 cursor-pointer">登录</a>
+      <router-link to="/profile" class="text-sm text-gray-600 hover:text-gray-900">个人中心</router-link>
     </nav>
   </header>
 </template>

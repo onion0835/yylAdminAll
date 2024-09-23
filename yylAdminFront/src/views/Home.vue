@@ -1,8 +1,13 @@
 <template>
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <AppHeader />
+<!--<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col">
+    <!-- Header -->
+    <div class="w-full bg-white shadow-sm">
+      <AppHeader />
+    </div>
   <!-- Main content -->
     <main class="py-12">
+      
       <h1 class="text-4xl font-bold text-center mb-4">yylAdmin</h1>
       <img src="../assets/main-logo.png" alt="yylAdmin Logo" class="w-48 mx-auto mb-6">
       
@@ -61,7 +66,10 @@
         </div>
       </div>
     </main>
-  <AppFooter />
+   <!-- Footer -->
+   <div class="w-full bg-white shadow-sm">
+      <AppFooter />
+    </div>
   </div>
 </template>
 

@@ -1,10 +1,12 @@
 <template>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Header -->
-      <AppHeader class="w-full" />
-  
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col">
+    <!-- Header -->
+    <div class="w-full bg-white shadow-sm">
+      <AppHeader />
+    </div>
+    <main class="py-12">
       <!-- Main content area -->
-      <div class="flex-1 overflow-hidden">
+      
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div class="flex -mx-4">
             <!-- 左侧目录 -->
@@ -26,10 +28,13 @@
             </div>
           </div>
         </div>
-      </div>
-  
+      
+    </main>
       <!-- Footer -->
-      <AppFooter class="w-full" />
+      <!-- Footer -->
+    <div class="w-full bg-white shadow-sm">
+      <AppFooter />
+    </div>
     </div>
   </template>
   
