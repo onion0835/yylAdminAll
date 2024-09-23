@@ -1,4 +1,17 @@
-# yylAdmin
+# yylAdminALL
+开发计划
+1、前端 完成内容页、文件、反馈、退出、个人中心等页面
+2、实现权限校验
+3、完成注册功能
+4、完成微信、QQ登录、国外需要google登录
+5、绑定支付宝、微信、stript等支付渠道代码
+6、实现大模型（openai）、AI绘画（stable diffusion）、AI语音（elevenlabs）、AI视频（runway）等接口
+7、实现前端、后端代码生成器
+8、完成前端、后端国际化
+9、完成前端、后端换肤
+10、完成前端、后端暗黑模式
+11、实现客户积分、购买积分、积分兑换、积分提现
+
 
 - [码云](https://gitee.com/skyselang/yylAdmin) | [Github](https://github.com/skyselang/yylAdmin)
 
