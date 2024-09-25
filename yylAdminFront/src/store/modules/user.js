@@ -33,6 +33,29 @@ export const useUserStore = defineStore('user',()=>{
               console.log('tokenName:', tokenName);
               token.value = data[tokenName]
               console.log('token:', token.value);
+
+              // 保存用户信息到 store
+              console.log('data_member_id:', data['member_id ']);
+              console.log('data_avatar_url:', data['avatar_url']);
+              console.log('data_nickname:', data['nickname']);
+              console.log('data_username:', data['username']);
+              console.log('data_roles:', data['roles']);
+              console.log('data_menus:', data['menus']);
+
+              user.member_id  = data['member_id ']
+              user.avatar_url = data['avatar_url']
+              user.nickname = data['nickname']
+              user.username = data['username']
+              user.roles.value = data['roles']
+              user.menus.value = data['menus']
+              console.log('user_member_id:', user.member_id);
+              console.log('user_avatar_url:', user.avatar_url);
+              console.log('user_nickname:', user.nickname);
+              console.log('user_username:', user.username);
+              console.log('user_roles:', user.roles);
+              console.log('user_menus:', user.menus);
+
+
               resolve()
             })
             .catch((err) => {

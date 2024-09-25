@@ -9,8 +9,10 @@
       <a v-if="!userStore.isLoggedIn" @click="login" class="text-sm text-gray-600 hover:text-gray-900 cursor-pointer">登录</a>
       <a v-else @click="logout" class="text-sm text-gray-600 hover:text-gray-900 cursor-pointer">退出</a>
     
-      <router-link to="/profile" class="text-sm text-gray-600 hover:text-gray-900">个人中心</router-link>
-      <span>isLoggedIn: {{ userStore.isLoggedIn }}</span>
+      <router-link v-if="userStore.isLoggedIn" to="/profile" class="text-sm text-gray-600 hover:text-gray-900">
+       您好 {{ userStore.user.nickname || userStore.user.username }}
+      </router-link>
+
     </nav>
   </header>
 </template>
