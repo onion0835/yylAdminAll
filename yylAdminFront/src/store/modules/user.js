@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { reactive } from 'vue'  // 添加这行
+import { reactive, computed  } from 'vue'  // 添加这行
 import { store } from '@/store'
 import { useStorage } from '@vueuse/core'
 import { useSettingsStore } from '@/store/modules/settings'
@@ -19,7 +19,8 @@ export const useUserStore = defineStore('user',()=>{
         roles: [],
         menus: []
       })
-    
+    // 添加 isLoggedIn 计算属性
+    const isLoggedIn = computed(() => !!token.value)
       // 登录
       function login (data)  {
         console.log('登录调用开始');
@@ -29,7 +30,9 @@ export const useUserStore = defineStore('user',()=>{
               console.log('登录调用结束');
               const data = res.data
               const tokenName = settingsStore.tokenName
+              console.log('tokenName:', tokenName);
               token.value = data[tokenName]
+              console.log('token:', token.value);
               resolve()
             })
             .catch((err) => {
@@ -38,11 +41,32 @@ export const useUserStore = defineStore('user',()=>{
             })
         })
       }
+
+      // 退出
+      function logout () {
+        console.log('退出调用开始');
+        //删除本地token
+        token.value = ''
+        
+        return new Promise((resolve, reject) => {
+          logoutApi()
+            .then(() => {
+              resolve()
+            })
+            .catch((err) => {
+              reject(err)
+            })
+        })
+      }
+
+
       // 返回包含状态和操作的对象
     return {
       token,
       user,
-      login
+      login,
+      logout,
+      isLoggedIn
   }
 
 })
