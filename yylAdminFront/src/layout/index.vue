@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import AppHeader from './AppHeader.vue'
 import AppFooter from './AppFooter.vue'
 

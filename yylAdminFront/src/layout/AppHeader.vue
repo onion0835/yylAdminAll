@@ -41,4 +41,5 @@ const login = () => {
   // 打开登录页面views 下面的 Login.vue
   router.push('/login');
 };
+
 </script>
