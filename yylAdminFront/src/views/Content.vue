@@ -1,10 +1,6 @@
 <template>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col">
-    <!-- Header -->
-    <div class="w-full bg-white shadow-sm">
-      <AppHeader />
-    </div>
-    <main class="py-12">
+
       <!-- Main content area -->
       
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -29,12 +25,7 @@
           </div>
         </div>
       
-    </main>
-      <!-- Footer -->
-      <!-- Footer -->
-    <div class="w-full bg-white shadow-sm">
-      <AppFooter />
-    </div>
+
     </div>
   </template>
   

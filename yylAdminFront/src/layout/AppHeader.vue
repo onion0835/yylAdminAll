@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between items-center py-3 px-4 sm:px-6 lg:px-8 bg-green-500 shadow-sm">
+  <header class="flex justify-between items-center py-3 px-4 sm:px-6 lg:px-8 bg-white shadow-sm">
     <img src="../assets/logo.png" alt="Logo" class="h-8 w-auto">
     <nav class="space-x-4">
       <router-link to="/" class="text-sm text-gray-600 hover:text-gray-900">首页</router-link>

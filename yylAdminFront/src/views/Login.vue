@@ -1,7 +1,6 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <AppHeader />
-    <main class="py-12">
+
       <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold text-center mb-6">登录</h2>
         <form @submit.prevent="handleLogin" ref="loginRef">
@@ -22,8 +21,7 @@
           <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Login</button>
         </form>
       </div>
-    </main>
-    <AppFooter />
+
   </div>
 </template>
 

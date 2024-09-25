@@ -2,11 +2,7 @@
 <!--<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col">
     <!-- Header -->
-    <div class="w-full bg-white shadow-sm">
-      <AppHeader />
-    </div>
-  <!-- Main content -->
-    <main class="py-12">
+
       
       <h1 class="text-4xl font-bold text-center mb-4">yylAdmin</h1>
       <img src="../assets/main-logo.png" alt="yylAdmin Logo" class="w-48 mx-auto mb-6">
@@ -65,12 +61,8 @@
           <p>登录退出，权限管理，日志管理，接口文档等基本功能，前后台基础框架，安装后即可使用。</p>
         </div>
       </div>
-    </main>
-   <!-- Footer -->
-   <div class="w-full bg-white shadow-sm">
-      <AppFooter />
     </div>
-  </div>
+
 </template>
 
 <script>
