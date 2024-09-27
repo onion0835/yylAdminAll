@@ -16,6 +16,8 @@ use app\common\service\content\CategoryService;
 use app\common\service\content\TagService;
 use app\common\service\content\ContentService;
 use hg\apidoc\annotation as Apidoc;
+use think\facade\Db;
+use think\facade\Log;
 
 /**
  * @Apidoc\Title("内容")
@@ -123,6 +125,15 @@ class Content extends BaseController
         $tag_unique      = $this->param('tag_unique/s', '');
         $keywords        = $this->param('keywords/s', '');
 
+        Log::info('Content list is_top: ' . $is_top);
+        Log::info('Content list is_hot: ' . $is_hot);
+        Log::info('Content list is_rec: ' . $is_rec);
+        Log::info('Content list category_id: ' . $category_id);
+        Log::info('Content list category_unique: ' . $category_unique);
+        Log::info('Content list tag_id: ' . $tag_id);
+        Log::info('Content list tag_unique: ' . $tag_unique);
+        Log::info('Content list keywords: ' . $keywords);
+        
         $where = [];
         if ($is_top !== '') {
             $where[] = ['is_top', '=', $is_top];
@@ -136,14 +147,17 @@ class Content extends BaseController
 
         if ($category_id !== '') {
             $category_ids = explode(',', $category_id);
+            Log::info('Content list category_ids: ' . json_encode($category_ids));
         }
         if ($category_unique !== '') {
             $category = CategoryService::info($category_unique, false);
             $category_ids[] = $category['category_id'] ?? '-1';
+            Log::info('Content list category_unique: ' . json_encode($category_ids));
         }
         if ($category_id !== '' || $category_unique !== '') {
             $where[] = ['category_ids', 'in', $category_ids];
         }
+        Log::info('Content  list 0 where: ' . json_encode($where));
 
         if ($tag_id !== '') {
             $tag_ids = explode(',', $tag_id);
@@ -159,9 +173,11 @@ class Content extends BaseController
         if ($keywords) {
             $where[] = ['name|title|keywords', 'like', '%' . $keywords . '%'];
         }
-
+        Log::info('Content  list 1 where: ' . json_encode($where));
         $where_base = [['release_time', '<=', datetime()], where_disable(), where_delete()];
         $where = array_merge($where, $where_base);
+        Log::info('Content  list 2 where: ' . json_encode($where));
+
 
         $where_top = $where_base;
         $where_top[] = ['is_top', '=', 1];
@@ -171,10 +187,17 @@ class Content extends BaseController
 
         $where_rec = $where_base;
         $where_rec[] = ['is_rec', '=', 1];
-
+        
         $order = ['sort' => 'desc', 'content_id' => 'desc'];
         $field = 'm.content_id,unique,image_id,name,description,sort,hits,is_top,is_hot,is_rec,source,author,release_time';
+        
+        Log::info('Content  list 3 where: ' . json_encode($where));
         $data  = ContentService::list($where, $this->page(), $this->limit(), $this->order($order), $field);
+        //打印一下刚刚执行的mysql语句
+        //$sql = $model->getLastSql();
+        // Log::info('ContentService list Executed SQL: ' . Db::getLastSql());
+        // 获取本次请求的所有SQL语句
+        
 
         $data['tops']     = ContentService::list($where_top, 0, 7, [], $field)['list'] ?? [];
         $data['hots']     = ContentService::list($where_hot, 0, 7, [], $field)['list'] ?? [];

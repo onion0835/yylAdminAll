@@ -13,7 +13,7 @@ use Closure;
 use think\Request;
 use think\Response;
 use app\common\service\content\SettingService;
-
+use think\facade\Log;
 /**
  * 内容设置中间件
  */
@@ -29,7 +29,9 @@ class ContentSettingMiddleware
     public function handle($request, Closure $next)
     {
         $setting = SettingService::info('is_api_content');
+        Log::info('ContentSettingMiddleware is_api_content='.$setting['is_api_content']);
         if (!$setting['is_api_content']) {
+            Log::info('ContentSettingMiddleware is_api_content=false');
             return error('内容功能未开启');
         }
 

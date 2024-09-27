@@ -12,11 +12,17 @@
               <aside class="w-64 bg-white shadow-md">
                 <nav class="mt-5 px-2">
                   <ul>
-                    <li v-for="item in menuItems" :key="item.id" class="mb-2">
-                      <span class="block px-4 py-2 text-sm font-semibold text-gray-900">{{ item.name }}</span>
-                      <ul v-if="item.items" class="ml-4">
-                        <li v-for="subItem in item.items" :key="subItem" class="mt-1">
-                          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 rounded">{{ subItem }}</a>
+                    <li v-for="item in menuItems" :key="item.category_id" class="mb-2">
+                      <div
+                        @click="updateContentList(item.category_id)"
+                        class="block px-4 py-2 text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
+                        {{ item.category_name }}
+                      </div>
+                      <ul v-if="item.children && item.children.length" class="ml-4">
+                        <li v-for="subItem in item.children" :key="subItem.category_id" class="mt-1">
+                          <a href="#"
+                          @click.prevent="updateContentList(subItem.category_id)"
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 rounded">{{ subItem.category_name }}</a>
                         </li>
                       </ul>
                     </li>
@@ -36,7 +42,7 @@
                       <svg v-else class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
                     <div class="w-2/3 p-4">
-                      <h3 class="text-lg font-semibold text-gray-900">{{ item.title }}</h3>
+                      <h3 class="text-lg font-semibold text-gray-900">{{ item.name }}</h3>
                       <div class="mt-2 flex items-center text-sm text-gray-600">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         <span>{{ item.views }}</span>
@@ -69,9 +75,24 @@
   </template>
   
   <script setup>
-import { ref } from 'vue';
+import { ref , onMounted } from 'vue';
 import Pagination from '../components/Pagination/Pagination.vue';
+import { useContentStoreHook } from '@/store/modules/content';
 
+
+const query= { search_field: 'category_name', search_exp: 'like', date_field: 'create_time' };
+
+const contentStore = useContentStoreHook();
+
+    const count = ref({})
+    const tag = ref({})
+    const page = ref({})
+    const pages = ref({})
+    const hot = ref({})
+    const tops = ref({})
+
+
+//分页处理
 const handlePageChange = (page) => {
   console.log('Current page:', page);
   // 在这里处理页面变化，例如加载新的数据
@@ -105,6 +126,28 @@ const contentItems = ref([
   },
   // ... 添加更多项目
 ]);
-  
+
+const updateContentList = async (category_id) => {
+  console.log('updateContentList', category_id);
+  try {
+    await contentStore.getContentList(category_id);
+    contentItems.value = contentStore.contentList;
+    menuItems.value = contentStore.catagory_tree;
+    count.value = contentStore.count;
+    tag.value = contentStore.tag;
+    page.value = contentStore.page;
+    pages.value = contentStore.pages;
+    hot.value = contentStore.hot;
+    tops.value = contentStore.tops;
+    console.log('contentItems', contentItems.value);
+    console.log('menuItems', menuItems.value);
+  } catch (error) {
+    console.error('获取文章列表失败:', error); 
+  }
+}
+
+//更新列表
+updateContentList();
+
   // 其他组件逻辑
   </script>

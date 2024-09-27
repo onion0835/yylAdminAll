@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 // 登录退出
-const url = '/admin/front.Login/'
+//const url = '/admin/front.Login/'
+const url = '/api/member.Login/'
 /**
  * 验证码
  *  @param {array} params 请求参数

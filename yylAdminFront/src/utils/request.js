@@ -14,18 +14,22 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use(
+  
   // 请求配置
   (config) => {
+    console.log('请求拦截器',config);
     //const appStore = useAppStoreHook()
     const userStore = useUserStoreHook()
     const settingsStore = useSettingsStoreHook()
     const language = 'zh-cn'
     const tokenValue = userStore.token
     const tokenType = settingsStore.tokenType
-  
+    console.log('tokenValue',tokenValue);
+    console.log('tokenType',tokenType);
     // 设置Token
     if (tokenValue) {
       const tokenName = settingsStore.tokenName
+      console.log('tokenName',tokenName);
       if (tokenType === 'header') {
         // 请求头部token
         config.headers[tokenName] = tokenValue

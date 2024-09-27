@@ -6,11 +6,11 @@
         <form @submit.prevent="handleLogin" ref="loginRef">
           <div class="mb-4">
             <label for="username" class="block text-sm font-medium text-gray-700">用户名:</label>
-            <input type="text" v-model="loginForm.username" 
+            <input type="text" v-model="loginForm.account" 
             id="username" required 
-            @blur="validateField('username')"
+            @blur="validateField('account')"
             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
-            <p v-if="errors.username" class="mt-1 text-sm text-red-600">{{ errors.username }}</p>
+            <p v-if="errors.account" class="mt-1 text-sm text-red-600">{{ errors.username }}</p>
           </div>
           <div class="mb-6">
             <label for="password"  class="block text-sm font-medium text-gray-700">密码:</label>
@@ -39,15 +39,16 @@ const errors = reactive({});
 
 // 改成 组合API模式
 const loginForm=ref({
-        username: '',
-        password: '',
-        captcha_id: '',
-        captcha_code: '',
+      account: '',
+      username: '',
+      password: '',
+      captcha_id: '',
+      captcha_code: '',
         ajcaptcha: {}
       });
 
 const loginRules = {
-  username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
+  account: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
   password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }]
 };
 

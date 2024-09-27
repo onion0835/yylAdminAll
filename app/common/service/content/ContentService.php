@@ -14,7 +14,8 @@ use app\common\model\content\ContentModel;
 use app\common\model\content\CategoryModel;
 use app\common\model\content\AttributesModel;
 use hg\apidoc\annotation as Apidoc;
-
+use think\facade\Db;
+use think\facade\Log;
 /**
  * 内容管理
  */
@@ -62,6 +63,9 @@ class ContentService
      */
     public static function list($where = [], $page = 1, $limit = 10,  $order = [], $field = '')
     {
+
+        Log::info('ContentService list where : ' . json_encode($where));
+
         $model = new ContentModel();
         $pk = $model->getPk();
         $group = 'm.' . $pk;
@@ -77,6 +81,8 @@ class ContentService
         foreach ($where as $wk => $wv) {
             if ($wv[0] == 'category_ids') {
                 $model = $model->join('content_attributes c', 'm.content_id=c.content_id')->where('c.category_id', $wv[1], $wv[2]);
+                $sql = $model->getLastSql();
+         Log::info('ContentService list Executed SQL: ' . Db::getLastSql());
                 unset($where[$wk]);
             }
             if ($wv[0] == 'tag_ids') {
@@ -85,6 +91,7 @@ class ContentService
             }
         }
         $where = array_values($where);
+        Log::info('ContentService list array_values where : ' . json_encode($where));
 
         $with     = ['categorys', 'tags'];
         $append   = ['category_names', 'tag_names'];
@@ -124,6 +131,10 @@ class ContentService
         $list = $model->field($field)->where($where)
             ->with($with)->append($append)->hidden($hidden)
             ->order($order)->group($group)->select()->toArray();
+
+    //打印一下刚刚执行的mysql语句
+        $sql = $model->getLastSql();
+         Log::info('ContentService list Executed SQL: ' . Db::getLastSql());
 
         return compact('count', 'pages', 'page', 'limit', 'list');
     }

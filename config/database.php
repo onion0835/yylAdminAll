@@ -14,6 +14,7 @@ return [
 
     // 自定义时间查询规则
     'time_query_rule' => [],
+    'debug'  => true,
 
     // 自动写入时间戳字段
     // true为自动识别类型 false关闭

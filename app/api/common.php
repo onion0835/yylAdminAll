@@ -8,13 +8,13 @@
 // +----------------------------------------------------------------------
 
 // api公共函数文件
-namespace app\api\common;
+//namespace app\api\common;
 
 use think\facade\Config;
 use think\facade\Request;
 use app\common\service\member\ApiService;
 use app\common\service\member\SettingService;
-
+use think\facade\Log;
 /**
  * 接口url获取
  * 应用/控制器/操作 
@@ -86,6 +86,8 @@ function api_is_unlogin($api_url = '')
     }
 
     $unlogin_url = ApiService::unloginList();
+    Log::info('unlogin_url ='. json_encode($unlogin_url));
+    Log::info('api_url ='.$api_url);
     if (in_array($api_url, $unlogin_url)) {
         return true;
     }
