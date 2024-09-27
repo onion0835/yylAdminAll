@@ -84,6 +84,7 @@ import { storeToRefs } from 'pinia';
 const query= { search_field: 'category_name', search_exp: 'like', date_field: 'create_time' };
 
 const contentStore = useContentStoreHook();
+const { contentItems, menuItems , currentCategory} = storeToRefs(contentStore);
 
 
 
@@ -93,7 +94,6 @@ const handlePageChange = (page) => {
   // 在这里处理页面变化，例如加载新的数据
 };
 
-const { contentItems, menuItems } = storeToRefs(contentStore);
 
 const updateContentList = async (category_id) => {
   console.log('updateContentList', category_id);
