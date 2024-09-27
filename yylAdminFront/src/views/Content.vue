@@ -78,18 +78,13 @@
 import { ref , onMounted } from 'vue';
 import Pagination from '../components/Pagination/Pagination.vue';
 import { useContentStoreHook } from '@/store/modules/content';
+import { storeToRefs } from 'pinia';
 
 
 const query= { search_field: 'category_name', search_exp: 'like', date_field: 'create_time' };
 
 const contentStore = useContentStoreHook();
 
-    const count = ref({})
-    const tag = ref({})
-    const page = ref({})
-    const pages = ref({})
-    const hot = ref({})
-    const tops = ref({})
 
 
 //分页处理
@@ -98,49 +93,12 @@ const handlePageChange = (page) => {
   // 在这里处理页面变化，例如加载新的数据
 };
 
-const menuItems = ref([
-  { id: 1, name: '产品中心', items: ['后端代码', '前端模板', '后台系统', 'sdfsdf'] },
-  { id: 2, name: '新闻资讯', items: ['行业动态', '软件更新', '公司新闻'] },
-  { id: 3, name: '案例展示', items: ['企业官网', '品牌官网', '电商系统'] },
-  { id: 4, name: '下载中心', items: ['开发文档', '使用手册'] },
-  { id: 5, name: '在线视频', items: ['演示', '宣传'] },
-  { id: 6, name: '关于我们', items: ['荣誉资质', '企业风采', '大事历程', '联系我们'] },
-]);
-
-const contentItems = ref([
-  {
-    id: 1,
-    title: '顺丰沪',
-    views: 21,
-    date: '2024-09-13 00:00:00',
-    image: '',
-    tags: ['测试', '配民快色部分新量']
-  },
-  {
-    id: 2,
-    title: '55',
-    views: 7,
-    date: '2024-09-08 11:50:26',
-    image: '',
-    tags: ['地球坏事', '小冰河来了？2024年再']
-  },
-  // ... 添加更多项目
-]);
+const { contentItems, menuItems } = storeToRefs(contentStore);
 
 const updateContentList = async (category_id) => {
   console.log('updateContentList', category_id);
   try {
     await contentStore.getContentList(category_id);
-    contentItems.value = contentStore.contentList;
-    menuItems.value = contentStore.catagory_tree;
-    count.value = contentStore.count;
-    tag.value = contentStore.tag;
-    page.value = contentStore.page;
-    pages.value = contentStore.pages;
-    hot.value = contentStore.hot;
-    tops.value = contentStore.tops;
-    console.log('contentItems', contentItems.value);
-    console.log('menuItems', menuItems.value);
   } catch (error) {
     console.error('获取文章列表失败:', error); 
   }

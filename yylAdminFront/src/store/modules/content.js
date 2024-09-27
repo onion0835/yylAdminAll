@@ -3,8 +3,8 @@ import { reactive, ref } from 'vue';
 import { list } from '@/api/front/content'
 
 export const useContentStore = defineStore('content',()=>{
-    const contentList = ref([])
-    const catagory_tree = ref([])
+    const contentItems = ref([])
+    const menuItems = ref([])
     const currentCategory = ref(null);
     const count = ref({})
     const tag = ref({})
@@ -45,17 +45,17 @@ async function getContentList(category_id = null) {
         console.log('API response:', res);  // 添加日志
 
         if (res.data && Array.isArray(res.data.list)) {
-            contentList.value = res.data.list;
+            contentItems.value = res.data.list;
         } else {
             console.error('Invalid content list data:', res.data);
-            contentList.value = [];
+            contentItems.value = [];
         }
 
         if (res.data && Array.isArray(res.data.category)) {
-            catagory_tree.value = res.data.category;
+            menuItems.value = res.data.category;
         } else {
             console.error('Invalid menu items data:', res.data);
-            catagory_tree.value = [];
+            menuItems.value = [];
         }
 
         currentCategory.value = category_id;
@@ -66,8 +66,8 @@ async function getContentList(category_id = null) {
     }
 }
     return {
-        contentList,
-        catagory_tree,
+        contentItems,
+        menuItems,
         currentCategory,
         count,
         tag,
