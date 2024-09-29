@@ -81,7 +81,7 @@ class ContentService
         foreach ($where as $wk => $wv) {
             if ($wv[0] == 'category_ids') {
                 $model = $model->join('content_attributes c', 'm.content_id=c.content_id')->where('c.category_id', $wv[1], $wv[2]);
-                $sql = $model->getLastSql();
+
          Log::info('ContentService list Executed SQL: ' . Db::getLastSql());
                 unset($where[$wk]);
             }
@@ -136,6 +136,13 @@ class ContentService
         $sql = $model->getLastSql();
          Log::info('ContentService list Executed SQL: ' . Db::getLastSql());
 
+         /*
+'count': 总记录数
+'pages': 总页数
+'page': 当前页码
+'limit': 每页显示的记录数
+'list': 查询结果列表
+         */
         return compact('count', 'pages', 'page', 'limit', 'list');
     }
 

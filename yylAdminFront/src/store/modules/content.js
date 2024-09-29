@@ -4,12 +4,16 @@ import { list } from '@/api/front/content'
 
 export const useContentStore = defineStore('content',()=>{
     const contentItems = ref([])
+    const topsItems = ref([])
+    const hotsItems = ref([])
+    const recsItems = ref([])
+
     const menuItems = ref([])
     const currentCategory = ref(null);
-    const count = ref({})
+    const count = ref(0)
     const tag = ref({})
-    const page = ref({})
-    const pages = ref({})
+    const page = ref(1)
+    const pages = ref(1)
     const hot = ref({})
     const tops = ref({})
 
@@ -39,16 +43,32 @@ export const useContentStore = defineStore('content',()=>{
 
     }
 */
-async function getContentList(category_id = null) {
+async function getContentList(category_id = null,initialPage = 1,limit = 10) {
     try {
-        const res = await list({ category_id });
+        const res = await list({ category_id,page: initialPage,limit });
         console.log('API response:', res);  // 添加日志
 
         if (res.data && Array.isArray(res.data.list)) {
             contentItems.value = res.data.list;
+
+            topsItems.value = res.data.tops;
+            console.log('useContentStore topsItems',topsItems.value)
+            console.log('useContentStore res.data.tops',res.data.tops)
+            hotsItems.value = res.data.hots;
+            recsItems.value = res.data.recs;
+            count.value = res.data.count;
+            pages.value = res.data.pages;
+            page.value = res.data.page;
+            
         } else {
             console.error('Invalid content list data:', res.data);
             contentItems.value = [];
+            topsItems.value = [];
+            hotsItems.value = [];
+            recsItems.value = [];
+            count.value = 0;
+            page.value = 0;
+            pages.value = 0;
         }
 
         if (res.data && Array.isArray(res.data.category)) {
@@ -67,6 +87,9 @@ async function getContentList(category_id = null) {
 }
     return {
         contentItems,
+        topsItems,
+        hotsItems,
+        recsItems,
         menuItems,
         currentCategory,
         count,
