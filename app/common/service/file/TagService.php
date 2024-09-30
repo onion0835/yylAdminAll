@@ -13,6 +13,7 @@ use app\common\cache\file\TagCache;
 use app\common\cache\file\FileCache;
 use app\common\model\file\TagModel;
 use app\common\model\file\TagsModel;
+use think\facade\Log;
 
 /**
  * 文件标签
@@ -54,8 +55,17 @@ class TagService
         if (empty($order)) {
             $order = ['sort' => 'desc', $pk => 'desc'];
         }
+        $query = $model->where($where);
+        $buildSql = $query->fetchSql()->count();
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  buildSql: ' . json_encode($buildSql));
+        
+        $count = $model->where($where)->count();  // 实际执行查询
 
         $count = $model->where($where)->count();
+        $sqlLog = $model->getLastSql();
+        $buildSql = $count->buildSql();
+        
+
         $pages = 0;
         if ($page > 0) {
             $model = $model->page($page);

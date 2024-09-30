@@ -18,5 +18,5 @@ return [
     // 接口速率中间件
     \think\middleware\Throttle::class,
     // 数据库日志中间件
-    \app\api\middleware\SqlLogMiddleware::class,
+    //\app\api\middleware\SqlLogMiddleware::class,
 ];

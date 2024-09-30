@@ -86,8 +86,8 @@ function api_is_unlogin($api_url = '')
     }
 
     $unlogin_url = ApiService::unloginList();
-    Log::info('unlogin_url ='. json_encode($unlogin_url));
-    Log::info('api_url ='.$api_url);
+    //Log::info('unlogin_url ='. json_encode($unlogin_url));
+    //Log::info('api_url ='.$api_url);
     if (in_array($api_url, $unlogin_url)) {
         return true;
     }

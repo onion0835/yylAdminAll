@@ -14,6 +14,7 @@ use app\common\cache\file\FileCache;
 use app\common\model\file\FileModel;
 use app\common\service\file\SettingService;
 use hg\apidoc\annotation as Apidoc;
+use think\facade\Log;
 
 /**
  * 文件管理
@@ -49,9 +50,15 @@ class FileService
      */
     public static function list($where = [], $page = 1, $limit = 10, $order = [], $field = '')
     {
+        
         $model = new FileModel();
         $pk = $model->getPk();
         $group = 'm.' . $pk;
+
+        $count = $model->where($where)->count();
+        $sqlLog = $model->getLastSql();
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  : ' . json_encode($sqlLog));
+
 
         if (empty($field)) {
             $field = $group . ',unique,group_id,storage,domain,file_type,file_hash,file_name,file_path,file_ext,file_size,sort,is_disable,create_time,update_time,delete_time';
@@ -68,7 +75,7 @@ class FileService
             }
         }
         $where = array_values($where);
-
+        
         $with     = ['tags'];
         $append   = ['tag_names', 'file_url'];
         $hidden   = ['tags'];
@@ -92,6 +99,8 @@ class FileService
         $field = implode(',', $fields);
 
         $count = $model->where($where)->group($group)->count();
+        $sqlLog = $model->getLastSql();
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  : ' . json_encode($sqlLog));
         $pages = 0;
         if ($page > 0) {
             $model = $model->page($page);
@@ -100,9 +109,16 @@ class FileService
             $model = $model->limit($limit);
             $pages = ceil($count / $limit);
         }
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  where: ' . json_encode($where));
         $list = $model->field($field)->where($where)
             ->with($with)->append($append)->hidden($hidden)
             ->order($order)->group($group)->select()->toArray();
+        
+            // 获取本次请求的所有SQL语句
+        $sqlLog = $model->getLastSql();
+           
+           // 记录到日志文件
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  : ' . json_encode($sqlLog));
 
         $ids       = array_column($list, $pk);
         $storages  = SettingService::storages();

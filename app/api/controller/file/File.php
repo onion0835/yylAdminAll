@@ -17,6 +17,8 @@ use app\common\service\file\FileService;
 use app\common\service\file\GroupService;
 use app\common\service\file\TagService;
 use hg\apidoc\annotation as Apidoc;
+use think\facade\Log;
+
 
 /**
  * @Apidoc\Title("文件")
@@ -109,8 +111,10 @@ class File extends BaseController
         }
         $setting['file_types'] = $file_types;
 
-        $where_base = [where_disable(), where_delete()];
-        $where = $where_base;
+       // $where_base = [where_disable(), where_delete()];
+       $where_base =[];
+       $where = $where_base;
+       /*
         if ($file_type) {
             if (!in_array($file_type, $setting['api_file_types'])) {
                 $file_type = '-1';
@@ -119,6 +123,7 @@ class File extends BaseController
         } else {
             $where[] = ['file_type', 'in', $setting['api_file_types']];
         }
+            */
         if ($group_id) {
             if (!in_array($group_id, $setting['api_file_group_ids'])) {
                 $group_id = -1;
@@ -135,8 +140,10 @@ class File extends BaseController
         } else {
             $where[] = ['tag_ids', 'in', $setting['api_file_tag_ids']];
         }
+            
         $order = ['sort' => 'desc', 'file_id' => 'desc'];
         $field = 'm.file_id,unique,group_id,storage,domain,file_type,file_hash,file_name,file_path,file_ext,file_size,sort';
+        Log::info('File  list  where: ' . json_encode($where));
         $data  = FileService::list($where, $this->page(), $this->limit(), $this->order($order), $field);
 
         $data['setting'] = $setting;
@@ -190,7 +197,8 @@ class File extends BaseController
             return error('文件不存在');
         }
 
-        $where = [where_disable(), where_delete()];
+       // $where = [where_disable(), where_delete()];
+      // $where = [ where_delete()];
         $where[] = ['file_type', 'in', $setting['api_file_types']];
         $where[] = ['group_id', 'in', $setting['api_file_group_ids']];
         $where[] = ['tag_ids', 'in', $setting['api_file_tag_ids']];
