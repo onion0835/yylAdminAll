@@ -34,11 +34,15 @@
             <!-- 中间文章列表 -->
             <div class="w-1/2 px-4 overflow-y-auto">
               <h2 class="text-xl font-bold mb-4">文章列表</h2>
-              <!-- 在这里添加文章列表 start-->
+              <!-- 在这里添加文章列表 start @click="navigateToContent(item.content_id)" -->
                 <div class="space-y-6">
-                  <div v-for="item in contentItems" :key="item.unique" class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                  <a v-for="item in contentItems" :key="item.content_id" 
+                  :href="`/content/${item.content_id}`"
+                  target="_blank"
+                 rel="noopener noreferrer"
+                  class="bg-white rounded-lg shadow-md overflow-hidden flex">
                     <div class="w-1/3 bg-gray-300 flex items-center justify-center">
-                      <img v-if="item.image" :src="item.image" :alt="item.title" class="w-full h-full object-cover" />
+                      <img v-if="item.image_url" :src="item.image_url" :alt="item.title" class="w-full h-full object-cover" />
                       <svg v-else class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
                     <div class="w-2/3 p-4">
@@ -53,7 +57,7 @@
                         <span v-for="tag in item.tags" :key="tag" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ tag }}</span>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </div>
                 <!-- 在这里添加文章列表 end-->
                 <!-- 分页开始， 按照数字展示每页  -->
@@ -76,30 +80,32 @@
             </div>
   
             <!-- 右侧热门文章列表 -->
-            <div class="w-1/4 px-4 overflow-y-auto">
-              <h2 class="text-xl font-bold mb-4">置顶文章</h2>
-              <!-- 在这里添加热门文章列表 -->
-              <div v-for="item in topsItems" :key="item.unique" class="bg-white rounded-lg shadow-md overflow-hidden flex">
-                
-                <div class="w-2/3 p-4">
-                  <h3 class="text-lg font-semibold text-gray-900">{{ item.name }}</h3>
+            <div class="w-1/4 px-4 overflow-y-auto right-sidebar">
+              <h2 class="text-lg font-bold mb-3">置顶文章</h2>
+              <!-- 置顶文章列表 -->
+              <div v-for="item in topsItems" :key="item.unique" class="bg-white rounded-lg shadow-sm overflow-hidden flex mb-2">
+                <div class="w-full p-2">
+                  <h3 class="text-sm font-medium text-gray-900">{{ item.name }}</h3>
                 </div>
               </div>
 
               <div class="section-spacer"></div>
 
-              <h2 class="text-xl font-bold mb-4">热门文章</h2>
-              <div v-for="item in hotsItems" :key="item.unique" class="bg-white rounded-lg shadow-md overflow-hidden flex">
-                <div class="w-2/3 p-4">
-                  <h3 class="text-lg font-semibold text-gray-900">{{ item.name }}</h3>
+              <h2 class="text-lg font-bold mb-3">热门文章</h2>
+              <!-- 热门文章列表 -->
+              <div v-for="item in hotsItems" :key="item.unique" class="bg-white rounded-lg shadow-sm overflow-hidden flex mb-2">
+                <div class="w-full p-2">
+                  <h3 class="text-sm font-medium text-gray-900">{{ item.name }}</h3>
                 </div>
               </div>
+
               <div class="section-spacer"></div>
 
-              <h2 class="text-xl font-bold mb-4">推荐文章</h2>
-              <div v-for="item in recsItems" :key="item.unique" class="bg-white rounded-lg shadow-md overflow-hidden flex">
-                <div class="w-2/3 p-4">
-                  <h3 class="text-lg font-semibold text-gray-900">{{ item.name }}</h3>
+              <h2 class="text-lg font-bold mb-3">推荐文章</h2>
+              <!-- 推荐文章列表 -->
+              <div v-for="item in recsItems" :key="item.unique" class="bg-white rounded-lg shadow-sm overflow-hidden flex mb-2">
+                <div class="w-full p-2">
+                  <h3 class="text-sm font-medium text-gray-900">{{ item.name }}</h3>
                 </div>
               </div>
             </div>
@@ -109,11 +115,14 @@
   </template>
   
   <script setup>
-import { ref , onMounted } from 'vue';
+import { ref , onMounted  } from 'vue';
 import Pagination from '../components/Pagination/Pagination.vue';
 import { useContentStoreHook } from '@/store/modules/content';
 import { storeToRefs } from 'pinia';
 
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const query= { search_field: 'category_name', search_exp: 'like', date_field: 'create_time' };
 
@@ -153,17 +162,36 @@ const updateContentList = async (category_id) => {
 //更新列表
 updateContentList();
 
+//页面跳转
+const navigateToContent = (contentId) => {
+  router.push({ name: 'ContentDetail', params: { id: contentId } });
+};
   // 其他组件逻辑
   </script>
 
 <style scoped>
 
 
-.section-spacer {
-  height: 2rem; /* 或其他你想要的间隔大小 */
-  margin: 1rem 0;
-  border-bottom: 1px solid #eee; /* 可选：添加一个分隔线 */
+
+.right-sidebar h2 {
+  font-size: 1.125rem; /* 18px */
+  margin-bottom: 0.75rem;
 }
 
+.right-sidebar h3 {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25;
+}
+
+.section-spacer {
+  height: 1.5rem; /* 减小间隔 */
+  margin: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.right-sidebar .bg-white {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
 
 </style>

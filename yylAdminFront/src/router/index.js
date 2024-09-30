@@ -4,7 +4,7 @@ import Home from '../views/Home.vue' // 导入组件
 //导入views/Login.vue
 import Login from '../views/Login.vue' // 导入组件
 import Content from '../views/Content.vue' // 导入组件
-
+import ContentDetail from '../views/ContentDetail.vue' // 导入组件
 
 /*
 const routes = [
@@ -43,6 +43,12 @@ const routes = [
           {
             path: 'login',
             component: Login, // 在布局组件中的 <router-view> 渲染 Dashboard 组件
+          },
+          {
+            path: 'content/:id',
+            name: 'ContentDetail',  // 添加这行
+            component: ContentDetail, // 在布局组件中的 <router-view> 渲染 Dashboard 组件
+            props: true  // 允许将路由参数作为 props 传递给组件
           }
 
         ]
