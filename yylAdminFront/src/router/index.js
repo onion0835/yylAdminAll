@@ -7,6 +7,7 @@ import Content from '../views/Content.vue' // 导入组件
 import FileList from '../views/FileList.vue' // 导入组件
 import ContentDetail from '../views/ContentDetail.vue' // 导入组件
 import File from '../views/File.vue' // 导入组件
+import Feedback from '../views/Feedback.vue' // 导入组件
 /*
 const routes = [
     {
@@ -58,6 +59,11 @@ const routes = [
             name: 'ContentDetail',  // 添加这行
             component: ContentDetail, // 在布局组件中的 <router-view> 渲染 Dashboard 组件
             props: true  // 允许将路由参数作为 props 传递给组件
+          },
+          {
+            path: 'feedback',
+            name: 'Feedback',
+            component: Feedback, // 在布局组件中的 <router-view> 渲染 Dashboard 组件
           }
 
         ]
