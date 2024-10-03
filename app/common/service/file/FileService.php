@@ -57,6 +57,7 @@ class FileService
         Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  : ' . json_encode($sqlLog));
 
         $group = 'm.' . $pk;
+        $model = $model->alias('m');
         Log::info(' (' . __FILE__ . ':' . __LINE__ . ') group : ' . json_encode($group));
         Log::info(' (' . __FILE__ . ':' . __LINE__ . ') where : ' . json_encode($where));
         $count = $model->where($where)->count();
@@ -71,7 +72,7 @@ class FileService
             $order = ['update_time' => 'desc', $group => 'desc'];
         }
 
-        $model = $model->alias('m');
+        
         foreach ($where as $wk => $wv) {
             if ($wv[0] == 'tag_ids' && is_array($wv[2])) {
                 $model = $model->join('file_tags t', 'm.file_id=t.file_id')->where('t.tag_id', $wv[1], $wv[2]);
@@ -143,6 +144,7 @@ class FileService
     public static function info($id, $exce = true)
     {
         $info = FileCache::get($id);
+        //$info=[];
         if (empty($info)) {
             $model = new FileModel();
             $pk = $model->getPk();

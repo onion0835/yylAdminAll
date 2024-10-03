@@ -1,23 +1,29 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-4 py-3">
     <!-- 上部分：标签和分类 -->
     <div class="mb-8">
       <div class="flex flex-wrap gap-4">
         
         <div class="w-full md:w-1/2">
-          <h2 class="text-xl font-semibold mb-2">分类</h2>
+          <h2 class="text-sm font-semibold mb-2">分类</h2>
           <div class="flex flex-wrap gap-2">
-            <button v-for="category in groups" :key="category" class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-              {{ category }}
+            <button v-for="category in groups" :key="category"
+            @click="selectGroup(category.group_id)"
+            class="px-3 py-1 rounded-full text-sm"
+            :class="selectedGroup === category.group_id ? 'bg-green-200 text-green-800' : 'bg-green-100 text-green-800'">
+            {{ category.group_name }}
             </button>
           </div>
         </div>
 
         <div class="w-full md:w-1/2">
-          <h2 class="text-xl font-semibold mb-2">标签</h2>
+          <h2 class="text-sm font-semibold mb-2">标签</h2>
           <div class="flex flex-wrap gap-2">
-            <button v-for="tag in tags" :key="tag" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-              {{ tag }}
+            <button v-for="tag in tags" :key="tag"
+            @click="selectTag(tag.tag_id)"
+            class="px-3 py-1 rounded-full text-sm"
+            :class="selectedTag === tag.tag_id ? 'bg-blue-200 text-blue-800' : 'bg-blue-100 text-blue-800'">
+              {{ tag.tag_name }}
             </button>
           </div>
         </div>
@@ -28,13 +34,13 @@
     <!-- 中间部分：图片展示 -->
     <div class="mb-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <div v-for="image in images" :key="image.id" class="bg-white rounded-lg shadow-md overflow-hidden">
-          <img :src="image.url" :alt="image.title" class="w-full h-48 object-cover">
+        <a :href="`/file/${image.file_id}`"  target="_blank" v-for="image in images" :key="image.id" class="bg-white rounded-lg shadow-md overflow-hidden">
+          <img :src="image.file_url" :alt="image.title" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="text-lg font-semibold mb-2">{{ image.title }}</h3>
             <p class="text-sm text-gray-600">{{ image.description }}</p>
           </div>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -54,8 +60,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { list } from '@/api/front/file';
+import { useRoute } from 'vue-router';
 
-// 模拟数据
+const router = useRoute()
+
+const selectedGroup = ref(null);
+const selectedTag = ref(null);
 const groups = ref(['壁纸']);
 const tags = ref(['风景', '人物']);
 
@@ -63,14 +73,33 @@ const images = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(10);
 
+const selectGroup = (category) => {
+  if(selectedGroup.value === category){
+    selectedGroup.value = null;
+  }else{
+    selectedGroup.value = category;
+  }
+  getFileList();
+};
+
+const selectTag = (tag) => {
+  if(selectedTag.value === tag){
+    selectedTag.value = null;
+  }else{
+    selectedTag.value = tag;
+  }
+  getFileList();
+};
+
 
 const getFileList = async () => {
  // const res = await list({ page: currentPage.value, limit: 12,tag_id:tags.value,group_id:groups.value });
- const res = await list({ page: currentPage.value, limit: 12 });
+ const res = await list({ page: currentPage.value, limit: 12,tag_id:selectedTag.value,group_id:selectedGroup.value });
   console.log(res);
   images.value = res.data.list
   groups.value = res.data.group
   tags.value = res.data.tag
+  totalPages.value = res.data.pages
 };
 
 // 模拟获取图片数据
@@ -86,19 +115,43 @@ const fetchImages = (page) => {
   images.value = mockImages;
 };
 
-const prevPage = () => {
+const prevPage = async () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    fetchImages(currentPage.value);
+   // fetchImages(currentPage.value);
+   const res = await list({ page: currentPage.value, limit: 12,tag_id:selectedTag.value,group_id:selectedGroup.value });
+  console.log(res);
+  images.value = res.data.list
+  groups.value = res.data.group
+  tags.value = res.data.tag
+  totalPages.value = res.data.pages
   }
 };
 
-const nextPage = () => {
+const nextPage = async () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
-    fetchImages(currentPage.value);
+   // fetchImages(currentPage.value);
+   const res = await list({ page: currentPage.value, limit: 12,tag_id:selectedTag.value,group_id:selectedGroup.value });
+  console.log(res);
+  images.value = res.data.list
+  groups.value = res.data.group
+  tags.value = res.data.tag
+  totalPages.value = res.data.pages
   }
 };
+
+// 跳转到文件详情
+const navigateToFile = (fileId) => {
+  //navigateTo(`/file/${fileId}`)
+  console.log(fileId);
+  const fileUrl = router.resolve({
+    name: 'File',
+    params: { fileid: fileId }
+  })
+  console.log(fileUrl);
+  window.open(fileUrl, '_blank');
+}
 
 onMounted(() => {
     getFileList()

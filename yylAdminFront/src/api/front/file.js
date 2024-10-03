@@ -18,3 +18,15 @@ export function list(params) {
     params: params
   })
 }
+
+/**
+ * 文件信息
+ * @param {array} params 请求参数
+ */
+export function info(params) {
+  return request({
+    url: url + 'info',
+    method: 'get',
+    params: params
+  })
+}

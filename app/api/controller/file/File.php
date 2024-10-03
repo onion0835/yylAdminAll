@@ -131,7 +131,7 @@ class File extends BaseController
             }
             $where[] = ['group_id', 'in', $group_id];
         } else {
-            $where[] = ['group_id', 'in', $setting['api_file_group_ids']];
+            //$where[] = ['group_id', 'in', $setting['api_file_group_ids']];
         }
 
         /*
@@ -152,11 +152,12 @@ class File extends BaseController
                 $tag_id = -1;
             }
             $where_tags[] = ['tag_id', 'in', [$tag_id]];
+            $file_tagsid=$model->where($where_tags)->column('file_id');
+        $where[]=['file_id','in',$file_tagsid];
         } else {
             $where_tags[] = ['tag_id', 'in', $setting['api_file_tag_ids']];
         }
-        $file_tagsid=$model->where($where_tags)->column('file_id');
-        $where[]=['file_id','in',$file_tagsid];
+        
 
             
         $order = ['sort' => 'desc', 'file_id' => 'desc'];
@@ -194,11 +195,13 @@ class File extends BaseController
     public function info()
     {
         $param = $this->params(['file_id/s' => '']);
-
+        Log::info('File  info  param: ' . json_encode($param));
         validate(FileValidate::class)->scene('info')->check($param);
 
         $data = FileService::info($param['file_id'], false);
+        Log::info('File  info  data: ' . json_encode($data));
         $setting = SettingService::info('api_file_types,api_file_group_ids,api_file_tag_ids');
+        Log::info('File  info  setting: ' . json_encode($setting));
         $file_type = $data['file_type'] ?? '';
         if (!in_array($file_type, $setting['api_file_types'])) {
             $file_type = '';
@@ -211,15 +214,22 @@ class File extends BaseController
         if (!array_intersect($tag_id, $setting['api_file_tag_ids'])) {
             $tag_id = 0;
         }
-        if (empty($data) || $data['is_disable'] || $data['is_delete'] || !$file_type || !$group_id || !$tag_id) {
+       // if (empty($data) || $data['is_disable'] || $data['is_delete'] || !$file_type || !$group_id || !$tag_id) {
+        if (empty($data) || $data['is_disable'] || $data['is_delete'] || !$file_type ) {
+            Log::info('File  info  data: ' . json_encode($data));
+            Log::info('File  info  is_disable: ' . json_encode($data['is_disable']));
+            Log::info('File  info  is_delete: ' . json_encode($data['is_delete']));
+            Log::info('File  info  file_type: ' . json_encode($file_type));
+            Log::info('File  info  group_id: ' . json_encode($group_id));
+            Log::info('File  info  tag_id: ' . json_encode($tag_id));
             return error('文件不存在');
         }
 
        // $where = [where_disable(), where_delete()];
       // $where = [ where_delete()];
         $where[] = ['file_type', 'in', $setting['api_file_types']];
-        $where[] = ['group_id', 'in', $setting['api_file_group_ids']];
-        $where[] = ['tag_ids', 'in', $setting['api_file_tag_ids']];
+        //$where[] = ['group_id', 'in', $setting['api_file_group_ids']];
+        //$where[] = ['tag_ids', 'in', $setting['api_file_tag_ids']];
         $prev_info = FileService::prevNext($data['file_id'], 'prev', $where);
         $next_info = FileService::prevNext($data['file_id'], 'next', $where);
         $data['prev_info'] = $prev_info;

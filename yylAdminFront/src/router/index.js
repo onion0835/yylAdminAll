@@ -6,7 +6,7 @@ import Login from '../views/Login.vue' // 导入组件
 import Content from '../views/Content.vue' // 导入组件
 import FileList from '../views/FileList.vue' // 导入组件
 import ContentDetail from '../views/ContentDetail.vue' // 导入组件
-
+import File from '../views/File.vue' // 导入组件
 /*
 const routes = [
     {
@@ -44,6 +44,10 @@ const routes = [
           {
             path: 'files',
             component: FileList, // 在布局组件中的 <router-view> 渲染 Dashboard 组件
+          },
+          {
+            path: 'file/:fileid',
+            component: File, // 在布局组件中的 <router-view> 渲染 Dashboard 组件
           },
           {
             path: 'login',
