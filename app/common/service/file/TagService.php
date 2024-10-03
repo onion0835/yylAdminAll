@@ -61,9 +61,7 @@ class TagService
         
         $count = $model->where($where)->count();  // 实际执行查询
 
-        $count = $model->where($where)->count();
-        $sqlLog = $model->getLastSql();
-        $buildSql = $count->buildSql();
+ 
         
 
         $pages = 0;

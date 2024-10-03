@@ -16,6 +16,7 @@ use app\common\service\file\SettingService;
 use app\common\service\file\FileService;
 use app\common\service\file\GroupService;
 use app\common\service\file\TagService;
+use app\common\model\file\TagsModel;
 use hg\apidoc\annotation as Apidoc;
 use think\facade\Log;
 
@@ -132,6 +133,8 @@ class File extends BaseController
         } else {
             $where[] = ['group_id', 'in', $setting['api_file_group_ids']];
         }
+
+        /*
         if ($tag_id) {
             if (!in_array($tag_id, $setting['api_file_tag_ids'])) {
                 $tag_id = -1;
@@ -140,6 +143,21 @@ class File extends BaseController
         } else {
             $where[] = ['tag_ids', 'in', $setting['api_file_tag_ids']];
         }
+            */
+        //关联tagfiles 模型
+        $model = new TagsModel();
+        $where_tags=[];
+        if ($tag_id) {
+            if (!in_array($tag_id, $setting['api_file_tag_ids'])) {
+                $tag_id = -1;
+            }
+            $where_tags[] = ['tag_id', 'in', [$tag_id]];
+        } else {
+            $where_tags[] = ['tag_id', 'in', $setting['api_file_tag_ids']];
+        }
+        $file_tagsid=$model->where($where_tags)->column('file_id');
+        $where[]=['file_id','in',$file_tagsid];
+
             
         $order = ['sort' => 'desc', 'file_id' => 'desc'];
         $field = 'm.file_id,unique,group_id,storage,domain,file_type,file_hash,file_name,file_path,file_ext,file_size,sort';

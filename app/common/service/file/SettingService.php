@@ -12,7 +12,7 @@ namespace app\common\service\file;
 use app\common\cache\file\SettingCache;
 use app\common\model\file\SettingModel;
 use hg\apidoc\annotation as Apidoc;
-
+use think\facade\Log;
 /**
  * 文件设置
  */
@@ -38,11 +38,14 @@ class SettingService
         $id = self::$id;
 
         $info = SettingCache::get($id);
+        $info = [];
         if (empty($info)) {
             $model = new SettingModel();
             $pk = $model->getPk();
 
             $info = $model->find($id);
+           
+
             if (empty($info)) {
                 $info[$pk]           = $id;
                 $info['create_uid']  = user_id();
@@ -54,6 +57,7 @@ class SettingService
             $info['file_types'] = self::fileTypes();
             $info['storages']   = self::storages();
             $info['accept_ext'] = self::fileAccept($info);
+            
 
             $info = array_merge($info, self::fileType('', true));
 
@@ -71,7 +75,7 @@ class SettingService
             }
             return $data;
         }
-
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  info: ' . json_encode($info));
         return $info;
     }
 

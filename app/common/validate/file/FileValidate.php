@@ -13,7 +13,7 @@ use think\Validate;
 use app\common\service\file\SettingService;
 use app\common\model\file\TagsModel;
 use app\common\model\file\FileModel;
-
+use think\facade\Log;
 /**
  * 文件管理验证器
  */
@@ -73,7 +73,11 @@ class FileValidate extends Validate
 
         $file_type   = SettingService::fileType($file_ext);
         $set_ext_str = $setting[$file_type . '_ext'];
+
         $set_ext_arr = explode(',', $set_ext_str);
+
+
+
         if (!in_array($file_ext, $set_ext_arr)) {
             return '上传的文件格式不允许，允许格式：' . $set_ext_str;
         }

@@ -15,7 +15,7 @@ use app\common\model\file\FileModel;
 use app\common\service\file\SettingService;
 use hg\apidoc\annotation as Apidoc;
 use think\facade\Log;
-
+use think\facade\Db;
 /**
  * 文件管理
  */
@@ -53,13 +53,17 @@ class FileService
         
         $model = new FileModel();
         $pk = $model->getPk();
-        $group = 'm.' . $pk;
+        $sqlLog = $model->getLastSql();
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  : ' . json_encode($sqlLog));
 
+        $group = 'm.' . $pk;
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ') group : ' . json_encode($group));
+        Log::info(' (' . __FILE__ . ':' . __LINE__ . ') where : ' . json_encode($where));
         $count = $model->where($where)->count();
         $sqlLog = $model->getLastSql();
         Log::info(' (' . __FILE__ . ':' . __LINE__ . ')  : ' . json_encode($sqlLog));
 
-
+   
         if (empty($field)) {
             $field = $group . ',unique,group_id,storage,domain,file_type,file_hash,file_name,file_path,file_ext,file_size,sort,is_disable,create_time,update_time,delete_time';
         }
