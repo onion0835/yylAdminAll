@@ -151,7 +151,7 @@ const submitFeedback = async () => {
   }
 
   try {
-    const response = await addFeedback(feedbackForm)
+    const response = await add(feedbackForm)
     if (response.code === 200) {
      
       showToast('反馈提交成功', 'success')
@@ -166,7 +166,7 @@ const submitFeedback = async () => {
 }
 
 const validateForm = () => {
-  if (!feedbackForm.type) {
+  if (feedbackForm.type === '' || feedbackForm.type === null) {
     showToast('请选择问题类型', 'error')
     return false
   }
