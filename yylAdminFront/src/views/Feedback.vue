@@ -107,6 +107,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { add } from '@/api/front/feedback'
+import { inject } from 'vue'
+
+const showToast = inject('showToast')
 
 const feedbackForm = reactive({
   type: '',
@@ -124,6 +127,7 @@ const typeNames = {
 }
 
 const handleFileUpload = (event) => {
+  console.log(event)
   const files = Array.from(event.target.files)
   files.forEach(file => {
     if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) {
@@ -132,8 +136,11 @@ const handleFileUpload = (event) => {
         feedbackForm.images.push(e.target.result)
       }
       reader.readAsDataURL(file)
+      console.log('上传成功')
+      showToast('上传成功', 'success')
     } else {
-      ElMessage.error('请上传2MB以内的图片文件')
+      console.log('请上传2MB以内的图片文件')
+      showToast('请上传2MB以内的图片文件', 'error')
     }
   })
 }
@@ -146,36 +153,37 @@ const submitFeedback = async () => {
   try {
     const response = await addFeedback(feedbackForm)
     if (response.code === 200) {
-      ElMessage.success('反馈提交成功')
+     
+      showToast('反馈提交成功', 'success')
       resetForm()
     } else {
-      ElMessage.error(response.msg || '反馈提交失败')
+      showToast(response.msg || '反馈提交失败', 'error')
     }
   } catch (error) {
     console.error('提交反馈时出错:', error)
-    ElMessage.error('提交反馈时出错')
+    showToast('提交反馈时出错', 'error')
   }
 }
 
 const validateForm = () => {
   if (!feedbackForm.type) {
-    ElMessage.error('请选择问题类型')
+    showToast('请选择问题类型', 'error')
     return false
   }
   if (!feedbackForm.title.trim()) {
-    ElMessage.error('请输入标题')
+    showToast('请输入标题', 'error')
     return false
   }
   if (!feedbackForm.content.trim()) {
-    ElMessage.error('请输入内容')
+    showToast('请输入内容', 'error')
     return false
   }
   if (feedbackForm.phone && !/^1[3-9]\d{9}$/.test(feedbackForm.phone)) {
-    ElMessage.error('请输入正确的手机号码')
+    showToast('请输入正确的手机号码', 'error')
     return false
   }
   if (feedbackForm.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(feedbackForm.email)) {
-    ElMessage.error('请输入正确的邮箱地址')
+    showToast('请输入正确的邮箱地址', 'error')
     return false
   }
   return true
