@@ -88,13 +88,24 @@
               <p class="pl-1">或拖放文件</p>
             </div>
             <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
+            <!-- 新增的图片预览区域 -->
+            <div v-if="feedbackForm.images.length > 0" class="mt-4 grid grid-cols-3 gap-4">
+              <div v-for="(image, index) in feedbackForm.images" :key="index" class="relative">
+               
+                <img :src="image" alt="Preview" class="w-full h-32 object-cover rounded-md">
+                <button type="button" @click.stop.prevent="removeImage(index)" 
+                @mousedown.stop.prevent class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs">
+                  X
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="flex justify-end">
         <button
-          type="submit"
+          type="button" @lick.stop="submitForm"
           class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           提交反馈
@@ -144,7 +155,14 @@ const handleFileUpload = (event) => {
     }
   })
 }
-
+const removeImage = ( index) => {
+  //event.preventDefault()
+  //event.stopPropagation()
+  console.log(index)
+  console.log(feedbackForm.images)
+  feedbackForm.images.splice(index, 1)
+  console.log(feedbackForm.images)
+}
 const submitFeedback = async () => {
   if (!validateForm()) {
     return
